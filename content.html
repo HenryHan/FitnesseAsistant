@@ -2,6 +2,41 @@
 <head>
 <script src="jquery-2.0.0.min.js"></script>
 <script src="script.js"></script>
+ <style type="text/css">
+        label.scenariotitle {
+            border:0px solid #eef4d3;
+            background-color:#eef4d3;
+            star : expression(
+            onmouseover=function(){this.style.borderColor="#060"},
+            onmouseout=function(){this.style.borderColor="#c00"})
+        }
+        .scenario_head {
+            padding: 5px 2px;
+            cursor: pointer;
+            position: relative;
+            margin:0px;
+            text-indent:1em;
+            font-weight:bold;
+        }
+        .scenario_body {
+            display:none;
+        }
+
+        .scenario {
+            background-color : #c3d9ff;
+            margin : 0px;
+            padding : 5px;
+            border : 1px;
+        }
+    </style>
 </head>
-<body><input id="test" value=''/></body>
+<body>
+	<div class="scenario" id="stepTemplate">
+    <p class="scenario_head"/><label class="scenariotitle">AddField</label>
+    <div class="scenario_body" style="display: block;">
+    <div class="item" id="itemTemplate"><input class="Parameter" />
+	</div>
+    </div>
+
+</body>
 </html>

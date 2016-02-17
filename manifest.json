@@ -1,6 +1,6 @@
 {
-  "name": "Page Redder",
-  "description": "Make the current page red",
+  "name": "Scenario Finder for Fitnesse",
+  "description": "find the scenarios",
   "version": "2.0",
   "permissions": [
 	"*://*/*",
@@ -10,8 +10,13 @@
     "scripts": ["background.js"],
     "persistent": false
   },
+  "icons": {
+        "48": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+   },
   "browser_action": {
-    "default_title": "Make this page red"
+    "default_title": "find the scenarios"
   },
   "manifest_version": 2,
   "web_accessible_resources": ["content.html", "script.js"],

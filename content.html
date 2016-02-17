@@ -1,6 +1,7 @@
 <html>
 <head>
 <script src="jquery-2.0.0.min.js"></script>
+<script src="clipboard.min.js"></script>
 <script src="script.js"></script>
  <style type="text/css">
 		label.page_title {
@@ -54,7 +55,7 @@
         }
         .scenario {
             background-color : #c3d9ff;
-            margin : 0px;
+            margin : 3px;
             padding : 5px 2px;
             border : 1px;
         }
@@ -62,25 +63,24 @@
 </head>
 <body>
 	
-	
-	<div class="scenario" id="scenario_template" >
-		<p class="scenario_head"/><label class="scenario_title">AddField</label>
-		<div class="Toggle_body" style="display: block;">
-			<table>
-				<tr><td>user</td><td><input class="Parameter" name="user"/></td><td>(remark)</td></tr>
-				<tr><td>Code:</td><td><label name="code" /></td></tr>
-				<tr><td><input type="button" id="GenerateAndCopy" value="GenerateAndCopy" /></td><td><label name="status" /></td></tr>
+	<input id="url"/><input type="button" id="Find" value="Find" />
+	<div class="scenario" id="scenario_template" hidden="">
+		<p class="scenario_head"><label class="scenario_title">AddField</label></p>
+		<div class="Toggle_body" style="display: none;">
+			<table class="parameters">
 			</table>
 		</div>
+		<label>Code:  </label><label class="code"></label><p></p>
+		<input type="button" class="GenerateAndCopy" value="GenerateAndCopy" />
 	</div>
 	<div class="section" id="section_template" hidden="">
 		<p class="section_head"/><label class="section_title">Section1</label>
-		<div class="Toggle_body" style="display: block;">		
+		<div class="Toggle_body" style="display: none;">		
 		</div>
 	</div>
 	<div class="page" id="page_template" hidden="">
 		<p class="page_head"/><label class="page_title">Page1</label>
-		<div class="Toggle_body" style="display: block;">		
+		<div class="Toggle_body" style="display: none;">		
 		</div>
 	</div>
 

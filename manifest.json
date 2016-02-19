@@ -21,7 +21,7 @@
   "manifest_version": 2,
   "web_accessible_resources": ["content.html", "script.js"],
   "content_scripts":[{
-		"matches":["http://fitnesse.nmsp.org/*"],
+		"matches":["http://*/*"],
 		"js":["jquery-2.0.0.min.js", "content.js"]
 	}]
 }

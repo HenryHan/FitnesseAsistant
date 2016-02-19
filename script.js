@@ -1,8 +1,46 @@
-﻿function getScenarios(url){
+﻿function getData(url){
 	$.get(url,function(data,status){
 			if(status=="success"){
-				var scenarios = [];
-				$(data).find("table:contains('comment:')").each(function (rowIndex, r) {
+				var page_count=0;
+				$(data).find("p.title:contains('Included page:')").each(function(){
+					
+					matches=$(this).text().match(/Included page:\s*([A-Za-z0-9\.<]*)/);
+					if(matches&&matches[1]){
+						var page_name=matches[1];
+						var library_body=$(this).next().clone();
+						library_body.find("p.title:contains('Included page:')").next().remove();
+						var scenarios=getScenarios(library_body);
+						if(scenarios.length>0){
+							var page_div=$("#page_template").clone(true);
+							page_div.removeAttr("hidden");
+							page_div.removeAttr("id");
+							page_div.find("label.page_title").text(page_name);
+							$("body").append(page_div);
+							page_count++;
+							var container=page_div.find("div.Toggle_body");
+							for (var i=0;i<scenarios.length;i++){
+								renderScenario(container,scenarios[i]);
+							}
+							
+						}	
+					}
+				});
+				if(page_count==0){
+					$("body").append($("<p>No Scenario is found on current page!</p>"));
+				}
+			}
+			else{
+				console.log("failed to fetch the content");
+			}
+			
+		});
+}
+
+function getScenarios(obj){
+	
+	var scenarios = [];
+	obj.find("table:contains('comment:')").each(function (rowIndex, r) {
+					
 					var tds=$(this).find('td');
 					matches=tds[0].textContent.match(/comment:\s*parameters for (\S*)/);
 					if(matches){
@@ -22,19 +60,12 @@
 					}
 					
 					
-				});
-				for (var i=0;i<scenarios.length;i++){
-					renderScenario(scenarios[i]);
-				}
-				
-			}
-			else{
-				console.log("failed to fetch the content");
-			}
-			
-		});
+	});
+    console.log(scenarios);
+	return scenarios;
 }
-function renderScenario(scenario){
+
+function renderScenario(div,scenario){
 	var scenario_div=$("#scenario_template").clone(true);
 	scenario_div.removeAttr("hidden");
 	scenario_div.removeAttr("id");
@@ -45,15 +76,15 @@ function renderScenario(scenario){
 		rows+=renderParameter(scenario.parameters[i]);
 	}
 	table.html(rows);
-	$("body").append(scenario_div);
+	div.append(scenario_div);
 }
 function renderParameter(parameter){
 	required="";
 	if(parameter["Mandatory"].toLowerCase()=="yes"){
 		required='<label style="color: red;">*</label>';
 	}
-	var input=$($.parseHTML('<div><input class="Parameter"/></div>')).children().attr("name", parameter["Name"]).attr("value",parameter["Example"]);
-	var tr='<tr><td>'+parameter["Name"]+required+'</td><td>'+input.parent().html()+'</td><td>('+parameter["Remark"]+')</td></tr>';
+	var input=$($.parseHTML('<div><input class="Parameter" style="width: 100%;"/></div>')).children().attr("name", parameter["Name"]).attr("title", parameter["Remark"]).attr("value",parameter["Example"]);
+	var tr='<tr><td>'+parameter["Name"]+required+'</td><td>'+input.parent().html()+'</td></tr>';
 	return tr;
 }
 $(document).ready(function() {
@@ -64,7 +95,7 @@ $(document).ready(function() {
 	var url=window.location.href.split("?")[1];
 	$("#url").val(url);
 	$("#Find").click(function() {
-		getScenarios($("#url").val());
+		getData($("#url").val());
 	});
 	$(".GenerateAndCopy").click(function() {
 		var title=$(this).siblings("p.scenario_head").children("label.scenario_title").text();

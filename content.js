@@ -1,5 +1,5 @@
 ﻿function activate(){
-	if(localStorage['isactivate']==1){
+	if($("#sidebar").html()){
 		$("#sidebar").remove();
 		$('body').css({
 		'padding-right': ''
@@ -7,7 +7,6 @@
 		$('nav').css({
 		'padding-right': ''
 		});
-		localStorage['isactivate']=0;
 	}
 	else{
 	  var sidebar;
@@ -17,7 +16,7 @@
 	  $('nav').css({
 		'padding-right': '30%'
 	  });
-	  var src=chrome.extension.getURL ("content.html")+"?"+window.location.href.split("?")[0];
+	  var src=chrome.extension.getURL ("content.html");
 	sidebar = $("<div id='sidebar'><iframe id='right' src='"+src+"' style='height:100%;visibility:inherit;width:100%;z-index:1'></iframe></div>");
 	  sidebar.css({
 		'position': 'fixed',
@@ -28,6 +27,5 @@
 		'height': '100%',
 	  });
 	  $('body').append(sidebar);
-	  localStorage['isactivate']=1;
 	}
 }

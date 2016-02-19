@@ -2,8 +2,8 @@
 	$.get(url,function(data,status){
 			if(status=="success"){
 				var page_count=0;
+				$("div:visible").remove();
 				$(data).find("p.title:contains('Included page:')").each(function(){
-					
 					matches=$(this).text().match(/Included page:\s*([A-Za-z0-9\.<]*)/);
 					if(matches&&matches[1]){
 						var page_name=matches[1];
@@ -26,7 +26,7 @@
 					}
 				});
 				if(page_count==0){
-					$("body").append($("<p>No Scenario is found on current page!</p>"));
+					$("body").append($("<div><p>No Scenario is found on current page!</p></div>"));
 				}
 			}
 			else{
@@ -61,7 +61,6 @@ function getScenarios(obj){
 					
 					
 	});
-    console.log(scenarios);
 	return scenarios;
 }
 
@@ -92,8 +91,9 @@ $(document).ready(function() {
                 $(this).next("div.Toggle_body").slideToggle(300);
 
     });
-	var url=window.location.href.split("?")[1];
+	var url=document.referrer.split("?")[0];
 	$("#url").val(url);
+	getData($("#url").val());
 	$("#Find").click(function() {
 		getData($("#url").val());
 	});

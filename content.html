@@ -21,6 +21,19 @@
             padding : 5px 2px;
             border : 1px;
         }
+		.library_head {
+            padding: 5px 2px;
+            position: relative;
+            margin:0px;
+            text-indent:1em;
+            font-weight:bold;
+        }
+		.library {
+            background-color : #58D3F7;
+            margin : 2px;
+            padding : 5px 2px;
+            border : 1px;
+        }
 		label.section_title {
             border:0px solid #eef4d3;
 			cursor: pointer;
@@ -62,10 +75,10 @@
     </style>
 </head>
 <body>
-	<input id="url"/><input type="button" id="Find" value="Find" />
+	<input id="url" width="100%"/><input type="button" id="Find" value="Find" />
 	<div class="scenario" id="scenario_template" hidden="">
 		<p class="scenario_head"><label class="scenario_title">AddField</label></p>
-		<div class="Toggle_body" style="display: none;">
+		<div class="Para_Toggle_body" style="display: none;">
 			<table class="parameters" width="100%">
 			</table>
 		</div>
@@ -74,9 +87,13 @@
 	</div>
 	<div class="page" id="page_template" hidden="">
 		<p class="page_head"/><label class="page_title"></label>
-		<div class="Toggle_body" style="display: none;">		
+		<div class="Page_Toggle_body" style="display: none;">		
 		</div>
 	</div>
-
+	<div class="library" id="library_template" hidden="">
+		<p class="library_head"/><label class="page_title"></label>
+		<div class="Lib_Toggle_body" style="display: none;">		
+		</div>
+	</div>
 </body>
 </html>

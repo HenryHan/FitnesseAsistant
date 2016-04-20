@@ -1,41 +1,58 @@
 ﻿function getData(url){
-	$.get(url,function(data,status){
-			if(status=="success"){
-				var page_count=0;
-				$("div:visible").remove();
-				$(data).find("p.title:contains('Included page:')").each(function(){
-					matches=$(this).text().match(/Included page:\s*([A-Za-z0-9\.<]*)/);
-					if(matches&&matches[1]){
-						var page_name=matches[1];
-						var library_body=$(this).next().clone();
-						library_body.find("p.title:contains('Included page:')").next().remove();
-						var scenarios=getScenarios(library_body);
-						if(scenarios.length>0){
-							var page_div=$("#page_template").clone(true);
-							page_div.removeAttr("hidden");
-							page_div.removeAttr("id");
-							page_div.find("label.page_title").text(page_name);
-							$("body").append(page_div);
-							page_count++;
-							var container=page_div.find("div.Toggle_body");
-							for (var i=0;i<scenarios.length;i++){
-								renderScenario(container,scenarios[i]);
-							}
-							
-						}	
-					}
-				});
-				if(page_count==0){
-					$("body").append($("<div><p>No Scenario is found on current page!</p></div>"));
-				}
-			}
-			else{
-				console.log("failed to fetch the content");
-			}
-			
-		});
+	$("div:visible").remove();
+	var group=url.split("/")
+	var path=group[group.length-1]
+	var base=url.substring(0,(url.length-path.length))
+	var base_length=base.length
+	var arr=path.split(".")
+	var page_count=0;
+	var lib_name=""
+	for (i in arr){
+		base=base+arr[i]+".";
+		liburl=base+"ScenarioLibrary";
+		lib_name=liburl.substring(base_length,liburl.length)
+		processUrl(liburl,lib_name)
+	}
 }
-
+function processUrl(liburl,lib_name){
+$.get(liburl,function(data,status){
+				if($(data).find("table").text()){
+					var library_div=$("#library_template").clone(true);
+					library_div.removeAttr("hidden");
+					library_div.removeAttr("id");
+					library_div.find("label.page_title").text(lib_name);
+					$("body").append(library_div);
+					$(data).find("p.title:contains('Included page:')").each(function(){
+						matches=$(this).text().match(/Included page:\s*([A-Za-z0-9\.<]*)/);
+						if(matches&&matches[1]){
+							var page_name=matches[1];
+							
+							var library_body=$(this).next().clone();
+							library_body.find("p.title:contains('Included page:')").next().remove();
+							var scenarios=getScenarios(library_body);
+							if(scenarios.length>0){
+								var page_div=$("#page_template").clone(true);
+								page_div.removeAttr("hidden");
+								page_div.removeAttr("id");
+								page_div.find("label.page_title").text(page_name);
+								library_div.find("div.Lib_Toggle_body").append(page_div);
+								
+								var container=page_div.find("div.Page_Toggle_body");
+								for (var i=0;i<scenarios.length;i++){
+									renderScenario(container,scenarios[i]);
+								}
+								
+							}	
+						}
+					});
+				}
+				else{
+					console.log("failed to fetch the content from the url:"+liburl);
+				}
+				
+			});	
+	
+}
 function getScenarios(obj){
 	
 	var scenarios = [];
@@ -75,7 +92,7 @@ function renderScenario(div,scenario){
 		rows+=renderParameter(scenario.parameters[i]);
 	}
 	table.html(rows);
-	div.append(scenario_div);
+	div.append(scenario_div); 
 }
 function renderParameter(parameter){
 	required="";
@@ -87,9 +104,10 @@ function renderParameter(parameter){
 	return tr;
 }
 $(document).ready(function() {
-	$("p.scenario_head,p.section_head,p.page_head").click(function() {
-                $(this).next("div.Toggle_body").slideToggle(300);
-
+	$("p.scenario_head,p.section_head,p.page_head,p.library_head").click(function() {
+                $(this).next("div.Page_Toggle_body").slideToggle(300);
+				$(this).next("div.Lib_Toggle_body").slideToggle(300);
+				$(this).next("div.Para_Toggle_body").slideToggle(300);
     });
 	var url=document.referrer.split("?")[0];
 	$("#url").val(url);
@@ -100,7 +118,7 @@ $(document).ready(function() {
 	$(".GenerateAndCopy").click(function() {
 		var title=$(this).siblings("p.scenario_head").children("label.scenario_title").text();
 		var hash="";
-		var paras=$(this).siblings("div.Toggle_body").find(".Parameter").each(function(){
+		var paras=$(this).siblings("div.Para_Toggle_body").find(".Parameter").each(function(){
 			  if($(this).val()){
 				  hash+=$(this).attr("name")+":"+$(this).val()+",";
 			  }

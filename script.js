@@ -115,7 +115,7 @@ $(document).ready(function() {
 	$("#Find").click(function() {
 		getData($("#url").val());
 	});
-	$(".GenerateAndCopy").click(function() {
+	$("#GenerateAndCopy").click(function() {
 		var title=$(this).siblings("p.scenario_head").children("label.scenario_title").text();
 		var hash="";
 		var paras=$(this).siblings("div.Para_Toggle_body").find(".Parameter").each(function(){
@@ -134,5 +134,8 @@ $(document).ready(function() {
 			$(this).attr("data-clipboard-text",code);
 			new Clipboard('.GenerateAndCopy');
 		}
+	});
+	$("#InsertNormal").click(function() {
+		alert($(".CodeMirror-code").html())
 	});
 })
